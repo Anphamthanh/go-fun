@@ -53,4 +53,25 @@ func TestPop1(t *testing.T) {
 	if err == nil {
 		t.Errorf("Nothing to pop")
 	}
+	items := [...]float64{4, 1, 2, 3, 6, 5}
+	for _, item := range items {
+		pq.Push(*NewItem(item))
+	}
+	if fmt.Sprintf("%v", pq.heap) != "[{<nil> 0} {6 6} {4 4} {5 5} {1 1} {3 3} {2 2}]" {
+		t.Errorf("%v", pq.heap)
+	}
+	answers := [...]float64{6, 5, 4, 3, 2, 1, 0}
+	for _, ans := range answers {
+		item, err := pq.Pop()
+		if err != nil {
+			if pq.Size() == 0 {
+				continue
+			} else {
+				t.Errorf("Unexpected %v", pq.heap)
+			}
+		}
+		if item.value != ans {
+			t.Errorf("Expect %s, got %s, pq %v", ans, item, pq.heap)
+		}
+	}
 }
