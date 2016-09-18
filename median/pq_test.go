@@ -2,8 +2,18 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"testing"
 )
+
+var cmp = func(i1 Item, i2 Item) int {
+	i := i1.priority - i2.priority
+	if i == 0 {
+		return 0
+	} else {
+		return int(i / math.Abs(i))
+	}
+}
 
 func TestEmpty1(t *testing.T) {
 	pq := NewPQ(cmp)

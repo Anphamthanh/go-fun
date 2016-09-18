@@ -4,19 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"log"
-	"math"
 	"os"
 	"strconv"
 )
-
-var cmp = func(i1 Item, i2 Item) int {
-	i := i1.priority - i2.priority
-	if i == 0 {
-		return 0
-	} else {
-		return int(i / math.Abs(i))
-	}
-}
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
