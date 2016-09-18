@@ -36,6 +36,13 @@ func (pq *PQ) swapItem(i1, i2 int) {
 	pq.heap[i1], pq.heap[i2] = pq.heap[i2], pq.heap[i1]
 }
 
+func (pq PQ) Peep() Item {
+	if pq.Size() == 0 {
+		panic("No thing to peep")
+	}
+	return pq.heap[len(pq.heap)-1]
+}
+
 func (pq *PQ) Push(i Item) {
 	pq.heap = append(pq.heap, i)
 	n := len(pq.heap) - 1
