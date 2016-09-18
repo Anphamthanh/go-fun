@@ -2,21 +2,11 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"testing"
 )
 
-var cmp = func(i1 Item, i2 Item) int {
-	i := i1.priority - i2.priority
-	if i == 0 {
-		return 0
-	} else {
-		return int(i / math.Abs(i))
-	}
-}
-
 func TestEmpty1(t *testing.T) {
-	pq := NewPQ(cmp)
+	pq := NewPQ(cmp1)
 	if !pq.isEmpty() {
 		t.Errorf("Should be empty!")
 	}
@@ -28,7 +18,7 @@ func TestEmpty1(t *testing.T) {
 }
 
 func TestPush1(t *testing.T) {
-	pq := NewPQ(cmp)
+	pq := NewPQ(cmp1)
 	items := [...]float64{1, 2, 3, 4, 5, 6}
 	for _, item := range items {
 		pq.Push(*NewItem(item))
@@ -43,7 +33,7 @@ func TestPush1(t *testing.T) {
 }
 
 func TestPush2(t *testing.T) {
-	pq := NewPQ(cmp)
+	pq := NewPQ(cmp1)
 	items := [...]float64{4, 1, 2, 3, 5, 6}
 	for _, item := range items {
 		pq.Push(Item{value: item, priority: -item})
@@ -58,11 +48,7 @@ func TestPush2(t *testing.T) {
 }
 
 func TestPop1(t *testing.T) {
-	pq := NewPQ(cmp)
-	_, err := pq.Pop()
-	if err == nil {
-		t.Errorf("Nothing to pop")
-	}
+	pq := NewPQ(cmp1)
 	items := [...]float64{4, 1, 2, 3, 6, 5}
 	for _, item := range items {
 		pq.Push(*NewItem(item))
@@ -70,16 +56,9 @@ func TestPop1(t *testing.T) {
 	if fmt.Sprintf("%v", pq.heap) != "[{<nil> 0} {6 6} {4 4} {5 5} {1 1} {3 3} {2 2}]" {
 		t.Errorf("%v", pq.heap)
 	}
-	answers := [...]float64{6, 5, 4, 3, 2, 1, 0}
+	answers := [...]float64{6, 5, 4, 3, 2, 1}
 	for _, ans := range answers {
-		item, err := pq.Pop()
-		if err != nil {
-			if pq.Size() == 0 {
-				continue
-			} else {
-				t.Errorf("Unexpected %v", pq.heap)
-			}
-		}
+		item := pq.Pop()
 		if item.value != ans {
 			t.Errorf("Expect %s, got %s, pq %v", ans, item, pq.heap)
 		}

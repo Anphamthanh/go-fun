@@ -1,7 +1,5 @@
 package main
 
-import "errors"
-
 type PQ struct {
 	cmpFunc func(Item, Item) int
 	heap    []Item
@@ -40,7 +38,7 @@ func (pq PQ) Peep() Item {
 	if pq.Size() == 0 {
 		panic("No thing to peep")
 	}
-	return pq.heap[len(pq.heap)-1]
+	return pq.heap[1]
 }
 
 func (pq *PQ) Push(i Item) {
@@ -52,9 +50,9 @@ func (pq *PQ) Push(i Item) {
 	}
 }
 
-func (pq *PQ) Pop() (Item, error) {
+func (pq *PQ) Pop() Item {
 	if pq.Size() == 0 {
-		return Item{}, errors.New("No more item")
+		panic("No thing to pop")
 	}
 	pq.swapItem(1, len(pq.heap)-1)
 	out := pq.heap[len(pq.heap)-1]
@@ -75,5 +73,5 @@ func (pq *PQ) Pop() (Item, error) {
 		pq.swapItem(p, c)
 		p, c = c, c*2
 	}
-	return out, nil
+	return out
 }
