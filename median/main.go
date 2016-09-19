@@ -28,17 +28,24 @@ func NewMedian() *Median {
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
-	input := []string{}
+	started := false
+	c, v, cmd := "", 0.0, []string{}
+	dict := make(map[float64]int)
 	for scanner.Scan() {
-		input = append(input, scanner.Text())
-	}
-	input = input[1:]
-	c, v := "", 0.0
-	for _, cmd := range input {
-		c = strings.Split(cmd, " ")[0]
-		v, _ = strconv.ParseFloat(strings.Split(cmd, " ")[1], 64)
+		if !started {
+			started = true
+			continue
+		}
+		cmd = strings.Split(scanner.Text(), " ")
+		c = cmd[0]
+		v, _ = strconv.ParseFloat(cmd[1], 64)
 		if c == "r" {
+			if _, ok := dict[v]; !ok {
+				fmt.Println("Wrong!")
+				continue
+			}
 			if median.Remove(v) {
+				delete(dict, v)
 				if median.lower.Size()+median.upper.Size() == 0 {
 					fmt.Println("Wrong!")
 				} else {
@@ -49,6 +56,7 @@ func main() {
 			}
 		} else {
 			median.Add(v)
+			dict[v] = 1
 			fmt.Println(strings.TrimRight(strings.TrimRight(fmt.Sprintf("%f", median.Get()), "0"), "."))
 		}
 	}
