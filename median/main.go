@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -12,11 +11,7 @@ import (
 var (
 	cmp1 = func(i1 Item, i2 Item) int {
 		i := i1.priority - i2.priority
-		if i == 0 {
-			return 0
-		} else {
-			return int(i / math.Abs(i))
-		}
+		return int(i)
 	}
 	cmp2 = func(i1 Item, i2 Item) int {
 		return -cmp1(i1, i2)
@@ -47,14 +42,14 @@ func main() {
 				if median.lower.Size()+median.upper.Size() == 0 {
 					fmt.Println("Wrong!")
 				} else {
-					fmt.Println(median.Get())
+					fmt.Println(strings.TrimRight(strings.TrimRight(fmt.Sprintf("%f", median.Get()), "0"), "."))
 				}
 			} else {
 				fmt.Println("Wrong!")
 			}
 		} else {
 			median.Add(v)
-			fmt.Println(median.Get())
+			fmt.Println(strings.TrimRight(strings.TrimRight(fmt.Sprintf("%f", median.Get()), "0"), "."))
 		}
 	}
 }

@@ -54,7 +54,16 @@ func (m *Median) Add(f float64) {
 func (m *Median) Remove(f float64) bool {
 	item := Item{value: f, priority: f}
 	if !m.lower.Remove(item) {
-		return m.upper.Remove(item)
+		if m.upper.Remove(item) {
+			if m.lower.Size() == m.upper.Size()+2 {
+				m.upper.Push(m.lower.Pop())
+			}
+			return true
+		}
+		return false
+	}
+	if m.lower.Size() == m.upper.Size()-1 {
+		m.lower.Push(m.upper.Pop())
 	}
 	return true
 }
