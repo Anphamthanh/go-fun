@@ -50,3 +50,11 @@ func (m *Median) Add(f float64) {
 	}
 	panic("Unexpected case " + m.String())
 }
+
+func (m *Median) Remove(f float64) bool {
+	item := Item{value: f, priority: f}
+	if !m.lower.Remove(item) {
+		return m.upper.Remove(item)
+	}
+	return true
+}

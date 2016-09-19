@@ -5,6 +5,20 @@ import (
 	"testing"
 )
 
+func TestRemove1(t *testing.T) {
+	pq := NewPQ(cmp1)
+	in := [...]float64{1, 2, 3, 0}
+	for _, n := range in {
+		pq.Push(*NewItem(n))
+	}
+	out := map[float64]bool{1: true, 2: true, 4: false, 0: true, 3: true}
+	for k, v := range out {
+		if v != pq.Remove(*NewItem(k)) {
+			t.Errorf("Expect %s Got %s", v, !v)
+		}
+	}
+}
+
 func TestEmpty1(t *testing.T) {
 	pq := NewPQ(cmp1)
 	if !pq.isEmpty() {

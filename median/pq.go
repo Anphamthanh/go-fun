@@ -57,7 +57,24 @@ func (pq *PQ) Pop() Item {
 	pq.swapItem(1, len(pq.heap)-1)
 	out := pq.heap[len(pq.heap)-1]
 	pq.heap = pq.heap[:len(pq.heap)-1]
-	for p, c := 1, 2; p < len(pq.heap); {
+	pq.fixDown(1)
+	return out
+}
+
+func (pq *PQ) Remove(r Item) bool {
+	for i, n := range pq.heap {
+		if n.Equal(r) {
+			pq.swapItem(i, len(pq.heap)-1)
+			pq.heap = pq.heap[:len(pq.heap)-1]
+			pq.fixDown(i)
+			return true
+		}
+	}
+	return false
+}
+
+func (pq *PQ) fixDown(p int) {
+	for c := p * 2; p < len(pq.heap); {
 		if c > len(pq.heap)-1 {
 			break
 		}
@@ -70,8 +87,11 @@ func (pq *PQ) Pop() Item {
 		if pq.cmpFunc(pq.heap[c+1], pq.heap[c]) > 0 {
 			c += 1
 		}
-		pq.swapItem(p, c)
-		p, c = c, c*2
+		if pq.cmpFunc(pq.heap[p], pq.heap[c]) < 0 {
+			pq.swapItem(p, c)
+			p, c = c, 2*c
+		} else {
+			break
+		}
 	}
-	return out
 }

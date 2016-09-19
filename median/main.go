@@ -6,6 +6,7 @@ import (
 	"math"
 	"os"
 	"strconv"
+	"strings"
 )
 
 var (
@@ -36,13 +37,24 @@ func main() {
 	for scanner.Scan() {
 		input = append(input, scanner.Text())
 	}
-	N, err := strconv.Atoi(input[0])
-	if err != nil {
-		panic("Error parsing " + input[0])
-	}
 	input = input[1:]
-	fmt.Println(N)
-	fmt.Println(input)
-	median.Add(7)
-	fmt.Println(median)
+	c, v := "", 0.0
+	for _, cmd := range input {
+		c = strings.Split(cmd, " ")[0]
+		v, _ = strconv.ParseFloat(strings.Split(cmd, " ")[1], 64)
+		if c == "r" {
+			if median.Remove(v) {
+				if median.lower.Size()+median.upper.Size() == 0 {
+					fmt.Println("Wrong!")
+				} else {
+					fmt.Println(median.Get())
+				}
+			} else {
+				fmt.Println("Wrong!")
+			}
+		} else {
+			median.Add(v)
+			fmt.Println(median.Get())
+		}
+	}
 }

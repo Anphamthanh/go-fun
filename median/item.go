@@ -8,3 +8,7 @@ type Item struct {
 func NewItem(value float64) *Item {
 	return &Item{value: value, priority: value}
 }
+
+func (i1 Item) Equal(i2 Item) bool {
+	return i1.value == i2.value
+}
